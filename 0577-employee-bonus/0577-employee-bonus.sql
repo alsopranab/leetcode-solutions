@@ -1,9 +1,14 @@
-# find the employee who has a bonus less than 1000.
-# and also the employee who haven't received any
+# obj:
 
-select e.name, e.bonus
-from employee e
-left join bonus
-        on e.empId = b.empId
+/* to find the emp who received b<1000 or nothing (null)
+
+
+*/
+
+#solution
+select e.name, b.bonus
+    from employee e
+    left join bonus b
+        on e.empId=b.empId
 where b.bonus < 1000
-or b.bonus is null;
+    or b.bonus is null;
