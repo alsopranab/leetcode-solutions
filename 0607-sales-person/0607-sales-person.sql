@@ -1,11 +1,15 @@
-# Write your MySQL query statement below
-SELECT name
-FROM salesperson sp
-WHERE sp.sales_id
-NOT IN (
-    SELECT sales_id
-    FROM Company c
-    INNER JOIN Orders O
-    ON o.com_id=c.com_id
-    WHERE c.name='RED'
-);
+#how to find a the sales person who havent sold anything to the company called RED
+
+# best approach by using "not"
+
+#first thing first.
+
+/* using */ select s.name
+from salesperson s
+where s.sales_id not in
+            ( select sales_id
+            from Orders o
+            inner join Company c
+                on o.com_id = c.com_id
+                where name = 'RED'
+            );
