@@ -1,8 +1,4 @@
-SELECT DISTINCT email
-FROM (
-    SELECT 
-        email,
-        COUNT(*) OVER (PARTITION BY email) AS cnt
-    FROM Person
-) x
-WHERE cnt > 1;
+select email
+from person
+group by email
+having count(email)>1;
