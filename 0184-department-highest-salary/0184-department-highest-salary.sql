@@ -6,7 +6,7 @@ Select
     e.salary
 From Employee e
 join Department d
-    on d.departmentId = e.id
+    on d.id = e.departmentId
 Where e.salary = 
                 (select
                 max(e2.salary)
