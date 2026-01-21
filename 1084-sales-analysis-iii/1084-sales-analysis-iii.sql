@@ -1,15 +1,16 @@
 # Write your MySQL query statement below
 
-SELECT
+SELECT DISTINCT
     p.product_id,
     p.product_name
 FROM product p
 JOIN sales s
     ON p.product_id = s.product_id
-GROUP BY
-    p.product_id,
-    p.product_name
-HAVING
-    MIN(s.sale_date) >= '2019-01-01'
-    AND MAX(s.sale_date) <= '2019-03-31';
+WHERE s.sale_date BETWEEN '2019-01-01' AND '2019-03-31'
+AND NOT EXISTS (
+    SELECT 1
+    FROM sales s2
+    WHERE s2.product_id = p.product_id
+      AND s2.sale_date NOT BETWEEN '2019-01-01' AND '2019-03-31'
+);
 
