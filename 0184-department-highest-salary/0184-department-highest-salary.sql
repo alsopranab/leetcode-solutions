@@ -2,15 +2,15 @@
 
 
 Select
-    d.name as department,
-    e.name as employee,
-    e.salary
+        d.name as Department,
+        e.name as Employee,
+        e.Salary
 
-        From Employee e
-        Join Department d
-        on e.DepartmentID=d.id
-    Where e.salary= (
-        Select max(e2.Salary)
-        from employee e2
-        where e2.DepartmentID=e.DepartmentID
-    );
+From Employee e
+Join Department d
+        on e.DepartmentId = d.id
+
+Where e.salary = (
+    Select Max(e2.Salary)
+    From employee e2
+    Where e2.DepartmentID=e.DepartmentId);
