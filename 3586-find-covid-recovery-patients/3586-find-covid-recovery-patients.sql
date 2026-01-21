@@ -13,22 +13,21 @@ SELECT
     p.patient_name,
     p.age,
     DATEDIFF(
-        MIN(CASE WHEN c2.result = 'Negative' THEN c2.test_date END),
-        MIN(CASE WHEN c1.result = 'Positive' THEN c1.test_date END)
+        MIN(c2.test_date),
+        MIN(c1.test_date)
     ) AS recovery_time
-FROM patients p
-JOIN covid_tests c1
-    ON p.patient_id = c1.patient_id
+FROM covid_tests c1
 JOIN covid_tests c2
-    ON p.patient_id = c2.patient_id
-    AND c2.test_date > c1.test_date
-WHERE c1.result = 'Positive'
+    ON c1.patient_id = c2.patient_id
+    AND c1.test_date < c2.test_date
+    AND c1.result = 'Positive'
+    AND c2.result = 'Negative'
+JOIN patients p
+    ON c1.patient_id = p.patient_id
 GROUP BY
     p.patient_id,
     p.patient_name,
     p.age
-HAVING
-    COUNT(CASE WHEN c2.result = 'Negative' THEN 1 END) > 0
 ORDER BY
     recovery_time,
     p.patient_name;
