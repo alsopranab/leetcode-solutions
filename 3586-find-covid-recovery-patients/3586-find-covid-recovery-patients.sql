@@ -9,35 +9,30 @@ Sort the output by recovery time and patient name.
 */
 
 WITH first_positive AS (
-    SELECT
-        patient_id,
-        MIN(test_date) AS first_positive_date
-    FROM covid_tests
-    WHERE result = 'Positive'
-    GROUP BY patient_id
+SELECT
+patient_id,
+MIN(test_date) AS first_pos_date
+FROM covid_tests
+WHERE result = 'Positive'
+GROUP BY patient_id
 ),
-first_negative_after_positive AS (
-    SELECT
-        c.patient_id,
-        MIN(c.test_date) AS first_negative_date
-    FROM covid_tests c
-    JOIN first_positive fp
-        ON c.patient_id = fp.patient_id
-        AND c.test_date > fp.first_positive_date
-    WHERE c.result = 'Negative'
-    GROUP BY c.patient_id
+first_negative_after AS (
+SELECT
+c.patient_id,
+MIN(c.test_date) AS first_neg_date
+FROM covid_tests c
+JOIN first_positive fp
+ON fp.patient_id = c.patient_id
+AND c.result = 'Negative'
+AND c.test_date > fp.first_pos_date
+GROUP BY c.patient_id
 )
 SELECT
-    p.patient_id,
-    p.patient_name,
-    p.age,
-    DATEDIFF(fn.first_negative_date, fp.first_positive_date) AS recovery_time
+p.patient_id,
+p.patient_name,
+p.age,
+DATEDIFF(fn.first_neg_date, fp.first_pos_date) AS recovery_time
 FROM patients p
-JOIN first_positive fp
-    ON p.patient_id = fp.patient_id
-JOIN first_negative_after_positive fn
-    ON p.patient_id = fn.patient_id
-ORDER BY
-    recovery_time,
-    p.patient_name;
-
+JOIN first_positive fp ON p.patient_id = fp.patient_id
+JOIN first_negative_after fn ON p.patient_id = fn.patient_id
+ORDER BY recovery_time ASC, p.patient_name ASC;
