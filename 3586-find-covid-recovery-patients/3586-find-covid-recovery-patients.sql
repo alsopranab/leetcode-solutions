@@ -8,31 +8,27 @@ Calculate recovery time using the difference between the positive and negative d
 Sort the output by recovery time and patient name.
 */
 
-WITH first_positive AS (
 SELECT
-patient_id,
-MIN(test_date) AS first_pos_date
-FROM covid_tests
-WHERE result = 'Positive'
-GROUP BY patient_id
-),
-first_negative_after AS (
-SELECT
-c.patient_id,
-MIN(c.test_date) AS first_neg_date
-FROM covid_tests c
-JOIN first_positive fp
-ON fp.patient_id = c.patient_id
-AND c.result = 'Negative'
-AND c.test_date > fp.first_pos_date
-GROUP BY c.patient_id
-)
-SELECT
-p.patient_id,
-p.patient_name,
-p.age,
-DATEDIFF(fn.first_neg_date, fp.first_pos_date) AS recovery_time
+    p.patient_id,
+    p.patient_name,
+    p.age,
+    DATEDIFF(
+        MIN(CASE WHEN c2.result = 'Negative' THEN c2.test_date END),
+        MIN(CASE WHEN c1.result = 'Positive' THEN c1.test_date END)
+    ) AS recovery_time
 FROM patients p
-JOIN first_positive fp ON p.patient_id = fp.patient_id
-JOIN first_negative_after fn ON p.patient_id = fn.patient_id
-ORDER BY recovery_time ASC, p.patient_name ASC;
+JOIN covid_tests c1
+    ON p.patient_id = c1.patient_id
+JOIN covid_tests c2
+    ON p.patient_id = c2.patient_id
+    AND c2.test_date > c1.test_date
+WHERE c1.result = 'Positive'
+GROUP BY
+    p.patient_id,
+    p.patient_name,
+    p.age
+HAVING
+    COUNT(CASE WHEN c2.result = 'Negative' THEN 1 END) > 0
+ORDER BY
+    recovery_time,
+    p.patient_name;
