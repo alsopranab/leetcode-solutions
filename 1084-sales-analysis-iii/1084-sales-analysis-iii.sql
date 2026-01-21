@@ -10,7 +10,11 @@ GROUP BY
     p.product_id,
     p.product_name
 HAVING
+    -- Ensure the product has no sales before the start date
     MIN(s.sale_date) >= '2019-01-01'
-    AND MAX(s.sale_date) <= '2019-03-31';
+    AND
+    -- Ensure the product has no sales after the end date
+    MAX(s.sale_date) <= '2019-03-31';
+
 
 
