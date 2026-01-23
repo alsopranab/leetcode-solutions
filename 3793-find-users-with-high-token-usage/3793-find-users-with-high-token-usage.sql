@@ -1,14 +1,14 @@
 # Write your MySQL query statement below
 
-SELECT
-    p.user_id,
-    COUNT(*) AS prompt_count,
-    ROUND(AVG(p.tokens), 2) AS avg_tokens
-FROM prompts p
-GROUP BY p.user_id
-HAVING
-    COUNT(*) >= 3
-    AND MAX(p.tokens) > ROUND(AVG(p.tokens), 2)
-ORDER BY avg_tokens DESC, p.user_id ASC;
+Select
+        user_id,
+        count(*) as prompt_count
+        round(avg(tokens),2) as avg_tokens
+    From prompts
+    Group by user_id
+    Having
+        Count(*) >2
+        and Max(tokens)>round(avg(tokens),2)
+    Order By avg_tokens Descm user_id Asc;
 
 
