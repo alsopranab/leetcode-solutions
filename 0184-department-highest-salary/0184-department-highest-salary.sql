@@ -1,23 +1,19 @@
 # Write your MySQL query statement below
 
-/*Approach*/
--- Join the tables
--- Check the salary for each employee
--- then once we join the tables
--- we will comare the salaries for the wholes employees against
--- their resp. dept.
-
 Select 
-        d.name as Department,
-        e.name as Employee,
-        e.Salary
+        D.Name as Department,
+        E.Name as Employee,
+        E.Salary
 
-        From employee e -- for one employee
-        join department d
-        on e.departmentId=d.id
+    From Employee as E
+    Department as D
+    On E.DepartmentId=D.id -- Department wise Employees
 
-        Where e.salary = (
-            Select max(e2.Salary)
-            from Employee e2 -- for each employee
-            Where e.departmentid=e2.departmentid -- against dept
-        );
+-- Dep,Emp,Sal
+
+    Where e.Salary = (
+        Select max(e2.Salary)
+        From Employee e2
+        Where e.DepartmentId=e2.DepartmentId -- We can compare btw same dpt employees
+    );
+
