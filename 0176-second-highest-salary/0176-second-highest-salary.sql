@@ -1,5 +1,5 @@
-Select 
+Select
 (Select Distinct Salary
 From Employee
-Order by Salary desc
+Order By Salary Desc
 Limit 1 Offset 1) as SecondHighestSalary;
