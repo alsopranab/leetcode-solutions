@@ -1,4 +1,4 @@
-Seleect 
+Select 
 (Select Distinct Salary
 From Employee
 Order By Salary Desc
