@@ -303,3 +303,11 @@ Sort only at the end
 Return simplified clean columns
 
 This reduces 95% confusion.
+
+<!---LeetCode Topics Start-->
+# LeetCode Topics
+## Database
+| Problem Name | Difficulty |
+| ------- | ------- |
+| [0176-second-highest-salary](https://github.com/alsopranab/leetcode-solutions/tree/main/0176-second-highest-salary/) | Medium |
+<!---LeetCode Topics End-->
